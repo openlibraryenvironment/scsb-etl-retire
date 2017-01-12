@@ -40,7 +40,9 @@ public class SCSBXMLFormatActiveMQConsumer {
         String batchHeaders = (String) exchange.getIn().getHeader("batchHeaders");
         String requestId = getDataExportHeaderUtil().getValueFor(batchHeaders, "requestId");
         try {
+            logger.info("before calling scsbXmlFormatterService.getSCSBXmlForBibRecords");
             toSCSBXmlString = scsbXmlFormatterService.getSCSBXmlForBibRecords(records);
+            logger.info("convert to scsb xml string completed");
 //            toSCSBXmlString = xmlFormatter.prettyPrint(formattedOutputForBibRecords);
             processSuccessReportEntity(exchange, records.size(), batchHeaders, requestId);
         } catch (Exception e) {

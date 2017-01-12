@@ -36,7 +36,9 @@ public class MarcXMLFormatActiveMQConsumer {
         String batchHeaders = (String) exchange.getIn().getHeader("batchHeaders");
         String requestId = getDataExportHeaderUtil().getValueFor(batchHeaders, "requestId");
         try {
+            logger.info("before calling marcXmlFormatterService.covertToMarcXmlString");
             toMarcXmlString = marcXmlFormatterService.covertToMarcXmlString(records);
+            logger.info("convert to marc xml string completed");
             processSuccessReportEntity(exchange, records, batchHeaders, requestId);
         } catch (Exception e) {
             logger.error(e.getMessage());

@@ -38,7 +38,9 @@ public class DeletedJsonFormatActiveMQConsumer {
         String requestId = getDataExportHeaderUtil().getValueFor(batchHeaders, "requestId");
 
         try {
+            logger.info("before calling deletedJsonFormatterService.getJsonForDeletedRecords");
             String formattedOutputForDeletedRecords = deletedJsonFormatterService.getJsonForDeletedRecords(deletedRecordList);
+            logger.info("convert to json string completed");
             deletedJsonString = formattedOutputForDeletedRecords.format(formattedOutputForDeletedRecords);
             processSuccessReportEntity(exchange, deletedRecordList.size(), batchHeaders, requestId);
         } catch (Exception e) {
