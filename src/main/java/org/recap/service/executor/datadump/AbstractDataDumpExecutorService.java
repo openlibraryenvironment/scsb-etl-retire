@@ -95,7 +95,7 @@ public abstract class AbstractDataDumpExecutorService implements DataDumpExecuto
                 sendBodyForIsRecordAvailableMessage(outputString);
             } else {
                 outputString = ReCAPConstants.DATADUMP_HTTP_REPONSE_RECORD_LIMIT_ERR_MSG;
-                sendBodyForIsRecordAvailableMessage(outputString);
+                sendBodyForHttp(outputString);
             }
         }
         return outputString;
