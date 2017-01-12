@@ -8,6 +8,8 @@ import org.recap.util.datadump.DataExportHeaderUtil;
 import org.recap.model.jaxb.BibRecord;
 import org.recap.service.formatter.datadump.SCSBXmlFormatterService;
 import org.recap.util.XmlFormatter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.Map;
 
 public class SCSBXMLFormatActiveMQConsumer {
 
+    private static final Logger logger = LoggerFactory.getLogger(SCSBXMLFormatActiveMQConsumer.class);
     SCSBXmlFormatterService scsbXmlFormatterService;
     XmlFormatter xmlFormatter;
     private DataExportHeaderUtil dataExportHeaderUtil;
@@ -37,10 +40,13 @@ public class SCSBXMLFormatActiveMQConsumer {
         String batchHeaders = (String) exchange.getIn().getHeader("batchHeaders");
         String requestId = getDataExportHeaderUtil().getValueFor(batchHeaders, "requestId");
         try {
+            logger.info("before calling scsbXmlFormatterService.getSCSBXmlForBibRecords");
             toSCSBXmlString = scsbXmlFormatterService.getSCSBXmlForBibRecords(records);
+            logger.info("convert to scsb xml string completed");
 //            toSCSBXmlString = xmlFormatter.prettyPrint(formattedOutputForBibRecords);
             processSuccessReportEntity(exchange, records.size(), batchHeaders, requestId);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             processFailureReportEntity(exchange, records.size(), batchHeaders, requestId, e);
         }
         long endTime = System.currentTimeMillis();

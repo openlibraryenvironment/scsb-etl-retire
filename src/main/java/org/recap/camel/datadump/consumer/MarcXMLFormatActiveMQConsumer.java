@@ -7,6 +7,8 @@ import org.marc4j.marc.Record;
 import org.recap.ReCAPConstants;
 import org.recap.util.datadump.DataExportHeaderUtil;
 import org.recap.service.formatter.datadump.MarcXmlFormatterService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -15,6 +17,8 @@ import java.util.*;
  */
 
 public class MarcXMLFormatActiveMQConsumer {
+
+    private static final Logger logger = LoggerFactory.getLogger(MarcXMLFormatActiveMQConsumer.class);
 
     private MarcXmlFormatterService marcXmlFormatterService;
     private DataExportHeaderUtil dataExportHeaderUtil;
@@ -32,9 +36,12 @@ public class MarcXMLFormatActiveMQConsumer {
         String batchHeaders = (String) exchange.getIn().getHeader("batchHeaders");
         String requestId = getDataExportHeaderUtil().getValueFor(batchHeaders, "requestId");
         try {
+            logger.info("before calling marcXmlFormatterService.covertToMarcXmlString");
             toMarcXmlString = marcXmlFormatterService.covertToMarcXmlString(records);
+            logger.info("convert to marc xml string completed");
             processSuccessReportEntity(exchange, records, batchHeaders, requestId);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             processFailureReportEntity(exchange, records, batchHeaders, requestId, e);
         }
 
