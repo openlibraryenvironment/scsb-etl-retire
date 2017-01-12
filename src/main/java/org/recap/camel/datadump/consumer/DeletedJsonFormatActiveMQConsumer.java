@@ -7,6 +7,8 @@ import org.recap.ReCAPConstants;
 import org.recap.util.datadump.DataExportHeaderUtil;
 import org.recap.model.export.DeletedRecord;
 import org.recap.service.formatter.datadump.DeletedJsonFormatterService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.Map;
 
 public class DeletedJsonFormatActiveMQConsumer {
 
+    private static final Logger logger = LoggerFactory.getLogger(DeletedJsonFormatActiveMQConsumer.class);
     DeletedJsonFormatterService deletedJsonFormatterService;
     private DataExportHeaderUtil dataExportHeaderUtil;
 
@@ -39,6 +42,7 @@ public class DeletedJsonFormatActiveMQConsumer {
             deletedJsonString = formattedOutputForDeletedRecords.format(formattedOutputForDeletedRecords);
             processSuccessReportEntity(exchange, deletedRecordList.size(), batchHeaders, requestId);
         } catch (Exception e) {
+            logger.error(e.getMessage());
             processFailureReportEntity(exchange, deletedRecordList.size(), batchHeaders, requestId, e);
         }
         long endTime = System.currentTimeMillis();
