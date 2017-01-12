@@ -93,7 +93,8 @@ public class SCSBXmlFormatterService implements DataDumpFormatterInterface {
         ContentType contentType = getContentType(bibliographicEntity.getContent());
         List<RecordType> record = contentType.getCollection().getRecord();
         RecordType recordType = record.get(0);
-        String value = ReCAPConstants.SCSB+"-"+bibliographicEntity.getBibliographicId();
+        String value = recordType.getControlfield().get(0).getValue();
+        value = ReCAPConstants.SCSB+"-"+value;
         recordType.getControlfield().get(0).setValue(value);
         bib.setContent(contentType);
         return bib;
